@@ -1,5 +1,5 @@
 <template>
-   <div id="nav">
+   <div class="container">
       <converter-form></converter-form>
    </div>
 </template>
@@ -14,4 +14,10 @@ export default {
 };
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+.container {
+   max-width: 1180px;
+   margin: 0 auto;
+   padding: 20px;
+}
+</style>
