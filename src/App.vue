@@ -15,6 +15,9 @@ export default {
 </script>
 
 <style lang="less">
+@import url('assets/less/_reset.less');
+@import url('assets/less/_normalize.less');
+
 .container {
    max-width: 1180px;
    margin: 0 auto;
