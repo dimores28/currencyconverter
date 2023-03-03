@@ -1,5 +1,5 @@
 <template>
-   <div class="converter-form converter">
+   <div class="converter-form converter" :class="reverse ? 'reverse' : ''">
       <div class="converter__row">
          <div class="converter__group">
             <label for="inputFiatMoney" class="converter__label"
@@ -16,7 +16,8 @@
             <select
                id="curensyTicker"
                class="converter__select converter__control"
-               v-model="currensyTicker">
+               v-model="currensyTicker"
+               @change="updete">
                <option
                   v-for="ticker in currensyTickerList"
                   :key="ticker"
@@ -27,7 +28,7 @@
          </div>
       </div>
 
-      <button class="converter-swap">
+      <button class="converter-swap" @click="swap">
          <svg
             width="24px"
             height="24px"
@@ -56,7 +57,8 @@
             <select
                id="cryptoTicker"
                class="converter__select converter__control"
-               v-model="cryptoTicker">
+               v-model="cryptoTicker"
+               @change="updete">
                <option
                   v-for="ticker in cryptoTickerList"
                   :key="ticker"
@@ -76,11 +78,12 @@ export default {
    name: 'converter-form',
    data() {
       return {
-         inputFiatMoney: 0,
+         inputFiatMoney: 1,
          inputCryptoMoney: 0,
-         currensyTicker: '',
-         cryptoTicker: '',
-         currencies: null
+         currensyTicker: 'USD',
+         cryptoTicker: 'BTC',
+         currencies: null,
+         reverse: false
       };
    },
    computed: {
@@ -104,24 +107,53 @@ export default {
       }
    },
    methods: {
-      updete() {}
+      updete() {
+         if (this.currencies) {
+            if (this.reverse) {
+               this.inputFiatMoney =
+                  this.inputCryptoMoney *
+                  this.currencies[this.cryptoTicker][this.currensyTicker];
+            } else {
+               this.inputCryptoMoney = parseFloat(
+                  this.inputFiatMoney /
+                     this.currencies[this.cryptoTicker][this.currensyTicker]
+               ).toFixed(17);
+            }
+         }
+      },
+      swap() {
+         this.reverse = !this.reverse;
+      }
    },
    watch: {
       inputFiatMoney() {
          if (isNaN(this.inputFiatMoney)) {
             this.inputFiatMoney = '';
          }
+         this.updete();
          // this.inputFiatMoney = this.inputFiatMoney.replace(/[^\d]/g,'');
       },
       inputCryptoMoney() {
          if (isNaN(this.inputCryptoMoney)) {
             this.inputCryptoMoney = '';
          }
+
+         this.updete();
+      },
+      reverse() {
+         if (this.reverse) {
+            this.inputCryptoMoney = 1;
+         } else {
+            this.inputFiatMoney = 1;
+         }
+
+         this.updete();
       }
    },
    mounted() {
       getCyrency().then((response) => {
          this.currencies = response;
+         this.updete();
       });
    }
 };
@@ -185,7 +217,6 @@ export default {
       background-position: 85% center;
    }
 }
-
 .converter-swap {
    margin: 0 14px;
    display: block;
@@ -200,6 +231,10 @@ export default {
    }
 }
 
+.reverse {
+   flex-direction: row-reverse;
+}
+
 @media screen and (max-width: 720px) {
    .converter {
       flex-direction: column;
@@ -207,6 +242,10 @@ export default {
 
    .converter-swap {
       max-width: 60px;
+   }
+
+   .reverse {
+      flex-direction: column-reverse;
    }
 }
 
