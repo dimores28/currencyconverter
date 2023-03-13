@@ -79,7 +79,11 @@
 </template>
 
 <script>
-import { getCyrency } from '../api/cryptocompareApi.js';
+import {
+   getCyrency,
+   getCryptoCurencys,
+   getFiatCyrencys
+} from '../api/cryptocompareApi.js';
 
 export default {
    name: 'converter-form',
@@ -96,22 +100,25 @@ export default {
    },
    computed: {
       cryptoTickerList() {
-         if (this.currencies) {
-            let arr = Object.keys(this.currencies);
-            return arr;
-         } else {
-            return [];
-         }
+         // if (this.currencies) {
+         //    let arr = Object.keys(this.currencies);
+         //    return arr;
+         // } else {
+         //    return [];
+         // }
+         return getCryptoCurencys();
       },
       currensyTickerList() {
-         if (this.currencies) {
-            let currenciesArr = Object.entries(this.currencies);
-            let arr = Object.keys(currenciesArr[0][1]);
+         // if (this.currencies) {
+         //    let currenciesArr = Object.entries(this.currencies);
+         //    let arr = Object.keys(currenciesArr[0][1]);
 
-            return arr;
-         } else {
-            return [];
-         }
+         //    return arr;
+         // } else {
+         //    return [];
+         // }
+
+         return getFiatCyrencys();
       }
    },
    methods: {

@@ -1,15 +1,18 @@
 <template>
    <div class="container">
       <converter-form></converter-form>
+      <table-currency-courses></table-currency-courses>
    </div>
 </template>
 
 <script>
 import ConverterForm from '@/components/ConverterForm';
+import TableCurrencyCourses from './components/TableCurrencyCourses.vue';
 
 export default {
    components: {
-      ConverterForm
+      ConverterForm,
+      TableCurrencyCourses
    }
 };
 </script>
